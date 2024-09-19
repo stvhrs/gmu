@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = bupin_scanner
+PRODUCT_NAME = gmu_scanner
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.bupinScanner
+PRODUCT_BUNDLE_IDENTIFIER = com.example.gmuScanner
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 com.example. All rights reserved.

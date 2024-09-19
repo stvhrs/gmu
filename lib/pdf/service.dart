@@ -15,12 +15,9 @@
  */
 
 import 'dart:async';
-import 'dart:math';
-import 'dart:ui';
 
-import 'package:Bupin/models/models.dart';
+import 'package:gmu/models/models.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart' as dum;
 import 'dart:math' as math; // import this
 
 import 'package:pdf/pdf.dart';
@@ -32,6 +29,7 @@ Future<Uint8List> printAll(
   //List of pdf widgets
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
+  final image2 = await imageFromAssetBundle('asset/Judul Bab.png');
   //Profile image
   buildFooter(int index) => Container(
         margin: const EdgeInsets.only(
@@ -73,6 +71,36 @@ Future<Uint8List> printAll(
         ]),
       );
 
+  widgets.add(
+    Stack(alignment: Alignment.center, children: [
+      Image(image2, fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
+      Positioned(
+          top: 36,
+          child: Text(
+              textAlign: TextAlign.center,
+              bab.judulBab,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+      Positioned(
+          top: 28,
+          left: 32,
+          child: Column(children: [
+            Text(
+                textAlign: TextAlign.center,
+                "Subbab",
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: PdfColor.fromHex("#ffffff"))),
+            Text(
+                textAlign: TextAlign.center,
+                bab.bab.toString(),
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: PdfColor.fromHex("#ffffff")))
+          ]))
+    ]),
+  );
   for (int i = 0; i < 6; i++) {
     widgets.add(
       Text(

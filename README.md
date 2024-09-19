@@ -1,4 +1,4 @@
-# bupin_scanner
+# gmu_scanner
 
 A new Flutter project.
 

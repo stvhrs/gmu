@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:Bupin/models/models.dart';
-import 'package:Bupin/pdf/service.dart';
+import 'package:gmu/models/models.dart';
+import 'package:gmu/pdf/service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -15,10 +16,12 @@ class BooksProvider with ChangeNotifier {
 
   set inputJudulBab(String val) {
     bab.judulBab = val;
+    notifyListeners();
   }
 
   set inputBab(String val) {
     bab.bab = int.parse(val);
+    notifyListeners();
   }
 
   set inputJudulFooter(String val) {
@@ -27,8 +30,13 @@ class BooksProvider with ChangeNotifier {
   }
 
   Future<Uint8List> generatePDF() async {
-    pdf = await printAll(footer, bab, tujuan, petaKonsep);
+    loading = true;
 
+    log(loading.toString());
+    pdf = await printAll(footer, bab, tujuan, petaKonsep);
+    loading = false;
+
+    log(loading.toString());
     return pdf!;
   }
 }

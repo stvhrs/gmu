@@ -1,5 +1,5 @@
-import 'package:Bupin/home.dart';
-import 'package:Bupin/state_management.dart';
+import 'package:gmu/home.dart';
+import 'package:gmu/state_management.dart';
 
 
 import 'package:flutter/material.dart';

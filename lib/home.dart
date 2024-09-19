@@ -1,5 +1,5 @@
-import 'package:Bupin/halaman_pdf.dart';
-import 'package:Bupin/input/input.dart';
+import 'package:gmu/halaman_pdf.dart';
+import 'package:gmu/input/input.dart';
 import 'package:flutter/material.dart';
 
 /// Flutter code sample for [BottomNavigationBar].
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ),
         ),
-        Expanded(child: HalamanPDFSoalState()),
+        const Expanded(child: HalamanPDFSoalState()),
       ],
     ));
   }
