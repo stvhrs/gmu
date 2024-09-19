@@ -127,6 +127,7 @@ class DropCapText extends StatelessWidget {
     TextSpan textSpan = TextSpan(
       text: parseInlineMarkdown ? null : restData,
       children: parseInlineMarkdown ? mdRest!.toTextSpanList() : null,
+      // ignore: deprecated_member_use
       style: textStyle.apply(fontSizeFactor: MediaQuery.of(context).textScaleFactor),
     );
 
@@ -219,6 +220,7 @@ class DropCapText extends StatelessWidget {
                 text: TextSpan(
                   text: parseInlineMarkdown ? null : restData.substring(min(charIndexEnd, restData.length)),
                   children: parseInlineMarkdown ? mdRest!.subchars(charIndexEnd).toTextSpanList() : null,
+                  // ignore: deprecated_member_use
                   style: textStyle.apply(fontSizeFactor: MediaQuery.of(context).textScaleFactor),
                 ),
               ),
@@ -242,6 +244,7 @@ class DropCapText extends StatelessWidget {
           ),
           TextSpan(
             children: mdData.subchars(dropCapChars).toTextSpanList(),
+            // ignore: deprecated_member_use
             style: textStyle.apply(fontSizeFactor: MediaQuery.of(context).textScaleFactor),
           ),
         ],

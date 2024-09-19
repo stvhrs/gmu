@@ -31,11 +31,9 @@ class BooksProvider with ChangeNotifier {
 
   Future<Uint8List> generatePDF() async {
     loading = true;
-
     log(loading.toString());
     pdf = await printAll(footer, bab, tujuan, petaKonsep);
     loading = false;
-
     log(loading.toString());
     return pdf!;
   }
