@@ -1,3 +1,4 @@
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:gmu/home.dart';
 import 'package:gmu/state_management.dart';
 
@@ -12,6 +13,7 @@ void main() async {
 
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  FlutterQuillExtensions.useSuperClipboardPlugin();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

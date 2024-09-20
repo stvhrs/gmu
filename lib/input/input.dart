@@ -1,3 +1,5 @@
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:gmu/input/component/rich_text_field.dart';
 import 'package:gmu/state_management.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +49,7 @@ class InputBab extends StatelessWidget {
               maxLines: 10,
             )),
         InputCaption(caption: "Peta Konsep", child: TextFormField()),
+        SizedBox(height: 500,child: RichTextField(controller: QuillController.basic()),),
         FloatingActionButton(
             backgroundColor: Colors.green,
             child: const Icon(Icons.refresh),

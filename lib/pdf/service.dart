@@ -30,7 +30,7 @@ Future<Uint8List> printAll(
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
   final image2 = await imageFromAssetBundle('asset/Judul Bab.png');
-  //Profile image
+
   buildFooter(int index) => Container(
         margin: const EdgeInsets.only(
           top: 10,
