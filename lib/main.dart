@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:gmu/home.dart';
 import 'package:gmu/state_management.dart';
@@ -37,7 +38,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,scrollBehavior: ScrollConfiguration.of(context).copyWith(
+    dragDevices: {
+      PointerDeviceKind.touch,
+      PointerDeviceKind.mouse,
+    },
+  ),
         themeMode: ThemeMode.dark,
         theme: ThemeData(
             pageTransitionsTheme: const PageTransitionsTheme(

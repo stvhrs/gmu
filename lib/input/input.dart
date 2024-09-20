@@ -10,6 +10,8 @@ class InputBab extends StatelessWidget {
   final TextEditingController _footerConttoler = TextEditingController();
   final TextEditingController _babConttoler = TextEditingController();
   final TextEditingController _judulBabConttoler = TextEditingController();
+    final TextEditingController _tujuuanConttoler = TextEditingController();
+
 
   InputBab({super.key});
   @override
@@ -45,11 +47,11 @@ class InputBab extends StatelessWidget {
             )),
         InputCaption(
             caption: "Tujuan",
-            child: TextFormField(
+            child: TextFormField(controller: _tujuuanConttoler  ,
               maxLines: 10,
             )),
         InputCaption(caption: "Peta Konsep", child: TextFormField()),
-        SizedBox(height: 500,child: RichTextField(controller: QuillController.basic()),),
+           InputCaption(caption: "Rich Text", child: SizedBox(height: 500,child: RichTextField(controller: QuillController.basic(),))),
         FloatingActionButton(
             backgroundColor: Colors.green,
             child: const Icon(Icons.refresh),
@@ -58,6 +60,7 @@ class InputBab extends StatelessWidget {
               prov.inputJudulFooter = _footerConttoler.text;
               prov.inputJudulBab = _judulBabConttoler.text;
               prov.inputBab = _babConttoler.text;
+                         prov.inputTujuan = _tujuuanConttoler.text;
             }),
       ]),
     );

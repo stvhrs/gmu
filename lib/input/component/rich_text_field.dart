@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 
 /// A text-field that uses the `flutter_quill` package to create rich-text.
@@ -59,10 +61,11 @@ class _RichTextFieldState extends State<RichTextField> {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-              QuillSimpleToolbar(
-                controller: widget.controller,
-                configurations: config,
-              ),
+              QuillToolbar.simple(controller: widget.controller,
+  configurations: QuillSimpleToolbarConfigurations(
+    embedButtons: FlutterQuillEmbeds.toolbarButtons(),
+  ),
+),
               const Divider(
                 height: 0,
               ),
@@ -81,9 +84,9 @@ class _RichTextFieldState extends State<RichTextField> {
                         QuillEditor.basic(
                           focusNode: _focusNode,
                           controller: widget.controller,
-                          configurations: const QuillEditorConfigurations(
-                              checkBoxReadOnly: true
-                          ),
+                         configurations: QuillEditorConfigurations(
+      embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
+    ),
                         ),
                       ],
                     ),

@@ -24,9 +24,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(
-              children: [
+            padding: const EdgeInsets.only(top: 40,left: 40,right: 30),
+            child: 
                 InputBab()
                 // Row(
                 //   children: [
@@ -43,8 +42,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 //     )
                 //   ],
                 // ),
-              ],
-            ),
+              
+            
           ),
         ),
         const Expanded(child: HalamanPDFSoalState()),

@@ -23,14 +23,16 @@ import 'dart:math' as math; // import this
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-
+//#22B573
 Future<Uint8List> printAll(
     PageFooter footer, Bab bab, Tujuan tujuan, PetaKonsep petaKonsep) async {
-  //List of pdf widgets
+
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
   final image2 = await imageFromAssetBundle('asset/Judul Bab.png');
+  final image3 = await imageFromAssetBundle('asset/Tujuan.png');
 
+  //Profile image
   buildFooter(int index) => Container(
         margin: const EdgeInsets.only(
           top: 10,
@@ -65,7 +67,7 @@ Future<Uint8List> printAll(
                   textAlign: TextAlign.center,
                   index.toString(),
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: PdfColor.fromHex("#ffffff"))))
         ]),
@@ -73,7 +75,8 @@ Future<Uint8List> printAll(
 
   widgets.add(
     Stack(alignment: Alignment.center, children: [
-      Image(image2, fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
+      Image(image2,
+          fit: BoxFit.fitWidth, alignment: Alignment.topCenter, height: 130),
       Positioned(
           top: 36,
           child: Text(
@@ -101,6 +104,24 @@ Future<Uint8List> printAll(
           ]))
     ]),
   );
+  widgets.add(Stack(
+      overflow: Overflow.visible,
+      alignment: Alignment.topLeft,
+      children: [
+        DottedBorder(
+            child: Container(
+          decoration: BoxDecoration(
+            color: PdfColor.fromHex("#DFE3D4"),
+          ),
+          width: double.infinity,
+          child: Padding(
+              padding:
+                  EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
+              child: Text(
+                  tujuan.tujuan)),
+        )),
+        Positioned(top: -20, left: 0, child: Image(image3, width: 225))
+      ]));
   for (int i = 0; i < 6; i++) {
     widgets.add(
       Text(
@@ -137,3 +158,90 @@ Future<Uint8List> printAll(
   );
   return await pdf.save();
 }
+
+class DottedBorder extends StatelessWidget {
+  final EdgeInsets padding;
+  final Widget child;
+  final PdfColor color;
+  final double strokeWidth;
+  final List<double> dashPattern;
+  final BorderType borderType;
+  final Radius radius;
+
+  DottedBorder({
+    required this.child,
+    this.padding = const EdgeInsets.all(2),
+    this.color = PdfColors.black,
+    this.strokeWidth = 2.0,
+    this.borderType = BorderType.Rect,
+    this.dashPattern = const [20, 20],
+    this.radius = const Radius.circular(0),
+  });
+
+  @override
+  Widget build(context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: CustomPaint(
+            painter: (canvas, size) {
+              canvas
+                ..setLineWidth(strokeWidth)
+                ..setStrokeColor(color)
+                ..setLineDashPattern(
+                  dashPattern,
+                );
+
+              switch (borderType) {
+                case BorderType.Circle:
+                  _getCirclePath(canvas, size);
+                case BorderType.Rect:
+                  _getRectPath(canvas, size);
+                case BorderType.RRect:
+                  _getRRectPath(canvas, size, radius.x);
+                case BorderType.Oval:
+                  _getOvalPath(canvas, size);
+              }
+
+              canvas.strokePath(close: true);
+            },
+          ),
+        ),
+        Padding(
+          padding: padding,
+          child: child,
+        ),
+      ],
+    );
+  }
+
+  void _getCirclePath(PdfGraphics canvas, PdfPoint size) {
+    double w = size.x;
+    double h = size.y;
+    double s = size.x > size.y ? size.y : size.x;
+
+    canvas.drawRRect(
+      w > s ? (w - s) / 1 : 0,
+      h > s ? (h - s) / 1 : 0,
+      s,
+      s,
+      s / 1,
+      s / 1,
+    );
+  }
+
+  void _getRRectPath(PdfGraphics canvas, PdfPoint size, double radius) {
+    canvas.drawRRect(0, 0, size.x, size.y, radius, radius);
+  }
+
+  void _getRectPath(PdfGraphics canvas, PdfPoint size) {
+    canvas.drawRect(0, 0, size.x, size.y);
+  }
+
+  void _getOvalPath(PdfGraphics canvas, PdfPoint size) {
+    canvas.drawEllipse(size.x, size.y, 8, 8);
+  }
+}
+
+/// The different supported BorderTypes
+enum BorderType { Circle, RRect, Rect, Oval }
