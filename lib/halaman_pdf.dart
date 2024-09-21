@@ -26,7 +26,8 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
   Uint8List? asu;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Consumer<BooksProvider>(builder: (context, book, child) {
+          return  Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green,
           onPressed: () async {
@@ -40,8 +41,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
               )),
         ),
         backgroundColor: Colors.white,
-        body: Consumer<BooksProvider>(builder: (context, book, child) {
-          return PdfPreview(
+        body: PdfPreview(
             loadingWidget: const Text('Loading...'),
             onError: (context, error) => const Text('Error...'),
             pdfFileName: 'Buku.pdf',
@@ -57,7 +57,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
             canChangeOrientation: false,
             canChangePageFormat: false,
             onShared: _showSharedToast,
-          );
-        }));
+          ));});
+        
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_to_pdf/converter/configurator/converter_option/pdf_page_format.dart';
+import 'package:flutter_quill_to_pdf/converter/pdf_converter.dart';
 import 'package:gmu/input/component/rich_text_field.dart';
 import 'package:gmu/state_management.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ class InputBab extends StatelessWidget {
   final TextEditingController _babConttoler = TextEditingController();
   final TextEditingController _judulBabConttoler = TextEditingController();
     final TextEditingController _tujuuanConttoler = TextEditingController();
-
+final QuillController _quillController=QuillController.basic();
 
   InputBab({super.key});
   @override
@@ -50,12 +52,25 @@ class InputBab extends StatelessWidget {
             child: TextFormField(controller: _tujuuanConttoler  ,
               maxLines: 10,
             )),
-        InputCaption(caption: "Peta Konsep", child: TextFormField()),
-           InputCaption(caption: "Rich Text", child: SizedBox(height: 500,child: RichTextField(controller: QuillController.basic(),))),
+         Consumer<BooksProvider>(
+          
+          builder: (context, book,c) {
+            return InputCaption(
+                caption: "PetaKonsep",
+                child:book.selectedImage!=null?Image.network( book.selectedImage!.path) :IconButton(onPressed: (){
+                 
+                  book.pickImage();
+                   
+                }, icon: Icon(Icons.browse_gallery)));
+          }
+        ),
+           InputCaption(caption: "Rich Text", child: SizedBox(height: 500,child: RichTextField(controller:_quillController))),
         FloatingActionButton(
             backgroundColor: Colors.green,
             child: const Icon(Icons.refresh),
             onPressed: () {
+
+
               var prov = Provider.of<BooksProvider>(context, listen: false);
               prov.inputJudulFooter = _footerConttoler.text;
               prov.inputJudulBab = _judulBabConttoler.text;

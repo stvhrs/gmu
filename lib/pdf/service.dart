@@ -23,10 +23,20 @@ import 'dart:math' as math; // import this
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-//#22B573
-Future<Uint8List> printAll(
-    PageFooter footer, Bab bab, Tujuan tujuan, PetaKonsep petaKonsep) async {
 
+//#22B573
+class User {
+  final String name;
+  final int age;
+  const User({required this.name, required this.age});
+}
+
+Future<Uint8List> printAll(
+  PageFooter footer,
+  Bab bab,
+  Tujuan tujuan,
+  PetaKonsep petaKonsep,
+) async {
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
   final image2 = await imageFromAssetBundle('asset/Judul Bab.png');
@@ -104,6 +114,19 @@ Future<Uint8List> printAll(
           ]))
     ]),
   );
+  final headers = ['Name', 'Age\nasdasd'];
+  final List users = [
+    const User(name: 'James', age: 19),
+    const User(name: 'ssss2', age: 21),
+    const User(name: 'Emma', age: 2)
+  ];
+  final data = users.map((x) => [x.name, x.age]).toList();
+  var coba = TableHelper.fromTextArray(
+    data: data,
+    headers: headers,
+    cellAlignment: Alignment.center,
+    tableWidth: TableWidth.min,
+  );
   widgets.add(Stack(
       overflow: Overflow.visible,
       alignment: Alignment.topLeft,
@@ -117,11 +140,13 @@ Future<Uint8List> printAll(
           child: Padding(
               padding:
                   EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
-              child: Text(
-                  tujuan.tujuan)),
+              child: Text(tujuan.tujuan)),
         )),
         Positioned(top: -20, left: 0, child: Image(image3, width: 225))
       ]));
+
+  widgets.add(coba);
+
   for (int i = 0; i < 6; i++) {
     widgets.add(
       Text(

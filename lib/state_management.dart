@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_to_pdf/converter/configurator/converter_option/pdf_page_format.dart';
+import 'package:flutter_quill_to_pdf/converter/pdf_converter.dart';
 import 'package:gmu/models/models.dart';
 import 'package:gmu/pdf/service.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,11 +20,12 @@ class BooksProvider with ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
   XFile? selectedImage;
 
-  Future<void> pickImage(ImageSource source) async {
+  Future<void> pickImage( ) async {
     final XFile? image =
-        await _picker.pickImage(source: source, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, );
     if (image != null) {
       selectedImage = image;
+      log(selectedImage!.path);
       notifyListeners();
     }
   }
@@ -44,8 +48,28 @@ class BooksProvider with ChangeNotifier {
     tujuan.tujuan = val;
     notifyListeners();
   }
-
-
+final PDFPageFormat pageFormat = PDFPageFormat(
+   width: 90 * 3,  //max width of the page
+   height: 270 * 3 ,//max height of the page,
+   marginTop: 0,
+   marginBottom: 0,
+   marginLeft: 0,
+   marginRight: 0,
+);
+PDFConverter pdfConverter = PDFConverter(pageFormat:PDFPageFormat(
+   width: 90 * 3,  //max width of the page
+   height: 270 * 3 ,//max height of the page,
+   marginTop: 0,
+   marginBottom: 0,
+   marginLeft: 0,
+   marginRight: 0,
+),
+    backMatterDelta: null,
+    frontMatterDelta: null,
+    document: QuillController.basic().document.toDelta(),
+    fallbacks: [],
+ 
+);
   Future<Uint8List> generatePDF() async {
     loading = true;
     log(loading.toString());

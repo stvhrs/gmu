@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
-
 /// A text-field that uses the `flutter_quill` package to create rich-text.
 /// The rich-text can be saved in a `Delta` object which can be converted
 /// to a JSON list.
@@ -24,11 +23,10 @@ class RichTextField extends StatefulWidget {
 
   /// Creates a text-field for writing a Quill rich-text widget.
   /// The `controller` parameter must be provided.
-  const RichTextField({
-    super.key,
-    required this.controller,
-    this.hintText = "Silakan mengetik"
-  });
+  const RichTextField(
+      {super.key,
+      required this.controller,
+      this.hintText = "Silakan mengetik"});
 
   @override
   State<RichTextField> createState() => _RichTextFieldState();
@@ -58,54 +56,53 @@ class _RichTextFieldState extends State<RichTextField> {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Theme.of(context).primaryColor),
       ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-              QuillToolbar.simple(controller: widget.controller,
-  configurations: QuillSimpleToolbarConfigurations(
-    embedButtons: FlutterQuillEmbeds.toolbarButtons(),
-  ),
-),
-              const Divider(
-                height: 0,
-              ),
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => _focusNode.requestFocus(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Stack(
-                      children: [
-                        if (_showHint) Text(
-                          widget.hintText,
-                          style:  TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                        QuillEditor.basic(
-                          focusNode: _focusNode,
-                          controller: widget.controller,
-                         configurations: QuillEditorConfigurations(
-      embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
-    ),
-                        ),
-                      ],
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        QuillToolbar.simple(
+          controller: widget.controller,
+          configurations: QuillSimpleToolbarConfigurations(
+            embedButtons: FlutterQuillEmbeds.toolbarButtons(),
+          ),
+        ),
+        const Divider(
+          height: 0,
+        ),
+        Expanded(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => _focusNode.requestFocus(),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                children: [
+                  if (_showHint)
+                    Text(
+                      widget.hintText,
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),
+                  QuillEditor.basic(
+                    focusNode: _focusNode,
+                    controller: widget.controller,
+                    configurations: QuillEditorConfigurations(
+                      embedBuilders: kIsWeb
+                          ? FlutterQuillEmbeds.editorWebBuilders()
+                          : FlutterQuillEmbeds.editorBuilders(),
                     ),
                   ),
-                ),
-              )
-            ]
-      ),
+                ],
+              ),
+            ),
+          ),
+        )
+      ]),
     );
   }
 }
 
 const toolbarToggleButtonStyle = QuillToolbarToggleStyleButtonOptions(
-  iconSize: 10,
-  iconTheme: QuillIconTheme(
-      iconButtonSelectedData: IconButtonData(color: Colors.white),
-      iconButtonUnselectedData: IconButtonData(color: Colors.grey)
-  )
-);
+    iconSize: 10,
+    iconTheme: QuillIconTheme(
+        iconButtonSelectedData: IconButtonData(color: Colors.white),
+        iconButtonUnselectedData: IconButtonData(color: Colors.grey)));
 
 const config = QuillSimpleToolbarConfigurations(
     toolbarIconAlignment: WrapAlignment.start,
