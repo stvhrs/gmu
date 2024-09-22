@@ -149,7 +149,7 @@ Future<Uint8List> printAll(
               child: Padding(
                   padding:
                       EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
-                  child: Text(tujuan.tujuan)),
+                  child: Text(tujuan.tujuan,style: TextStyle(fontSize: 11 ))),
             )),
             Positioned(top: -20, left: 0, child: Image(image3, width: 225))
           ])));
@@ -170,7 +170,7 @@ Future<Uint8List> printAll(
                   padding:
                       EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
                   child: petaKonsep.imagePath != null
-                      ? Image(MemoryImage(petaKonsep.imagePath!,),height: 300)
+                      ? Image(MemoryImage(petaKonsep.imagePath!,),height: 120)
                       : SizedBox()),
             )),
             Positioned(top: -30, left: 0, child: Image(image4, width: 225,alignment: Alignment.center))
