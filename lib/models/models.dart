@@ -1,5 +1,7 @@
 
 
+import 'dart:typed_data';
+
 class Bab {
    String judulBab;
    int bab;
@@ -24,9 +26,9 @@ class Tujuan {
   });
 }
 class PetaKonsep {
-   String imagePath;
+   Uint8List? imagePath;
 
   PetaKonsep({
-    required this.imagePath,
+     this.imagePath,
   });
 }

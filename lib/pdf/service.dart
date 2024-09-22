@@ -41,6 +41,7 @@ Future<Uint8List> printAll(
   final image = await imageFromAssetBundle('asset/Footer.png');
   final image2 = await imageFromAssetBundle('asset/Judul Bab.png');
   final image3 = await imageFromAssetBundle('asset/Tujuan.png');
+  final image4 = await imageFromAssetBundle('asset/Peta Konsep.png');
 
   //Profile image
   buildFooter(int index) => Container(
@@ -114,39 +115,86 @@ Future<Uint8List> printAll(
           ]))
     ]),
   );
-  final headers = ['Name', 'Age\nasdasd'];
+  final headers = ["No", 'Name', 'Age\nasdasd'];
   final List users = [
     const User(name: 'James', age: 19),
     const User(name: 'ssss2', age: 21),
     const User(name: 'Emma', age: 2)
   ];
-  final data = users.map((x) => [x.name, x.age]).toList();
+  final data = users
+      .map((x) => [
+            "1",
+            x.name,
+            x.age,
+          ])
+      .toList();
   var coba = TableHelper.fromTextArray(
     data: data,
     headers: headers,
     cellAlignment: Alignment.center,
     tableWidth: TableWidth.min,
   );
-  widgets.add(Stack(
-      overflow: Overflow.visible,
-      alignment: Alignment.topLeft,
-      children: [
-        DottedBorder(
-            child: Container(
-          decoration: BoxDecoration(
-            color: PdfColor.fromHex("#DFE3D4"),
-          ),
-          width: double.infinity,
-          child: Padding(
-              padding:
-                  EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
-              child: Text(tujuan.tujuan)),
-        )),
-        Positioned(top: -20, left: 0, child: Image(image3, width: 225))
-      ]));
+  widgets.add(Container(
+      margin: EdgeInsets.only(bottom: 40),
+      child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topLeft,
+          children: [
+            DottedBorder(
+                child: Container(
+              decoration: BoxDecoration(
+                color: PdfColor.fromHex("#DFE3D4"),
+              ),
+              width: double.infinity,
+              child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
+                  child: Text(tujuan.tujuan)),
+            )),
+            Positioned(top: -20, left: 0, child: Image(image3, width: 225))
+          ])));
 
+  widgets.add(Container(
+      margin: EdgeInsets.only(bottom: 40),
+      child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topLeft,
+          children: [
+            DottedBorder(
+                child: Container(
+              decoration: BoxDecoration(
+                color: PdfColor.fromHex("#DFE3D4"),
+              ),
+              width: double.infinity,
+              child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
+                  child: petaKonsep.imagePath != null
+                      ? Image(MemoryImage(petaKonsep.imagePath!,),height: 300)
+                      : SizedBox()),
+            )),
+            Positioned(top: -30, left: 0, child: Image(image4, width: 225,alignment: Alignment.center))
+          ])));
   widgets.add(coba);
-
+  widgets.add(Table(border: TableBorder.all(), children: [
+    TableRow(children: [
+      Text('Column 1'),
+      Text('Column 2'),
+    ]),
+    TableRow(children: [
+      Text('Entry 1'),
+      Table(border: TableBorder.all(), children: [
+        TableRow(children: [
+          Text('Nested Entry 1'),
+          Text('Nested Entry 2'),
+        ]),
+        TableRow(children: [
+          Text('Nested Entry 3'),
+          Text('Nested Entry 4'),
+        ]),
+      ]),
+    ]),
+  ]));
   for (int i = 0; i < 6; i++) {
     widgets.add(
       Text(

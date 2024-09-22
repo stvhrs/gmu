@@ -20,7 +20,7 @@ class InputBab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(
           children: [
             Flexible(
@@ -58,12 +58,14 @@ class InputBab extends StatelessWidget {
           return InputCaption(
               caption: "PetaKonsep",
               child: book.selectedImage != null
-                  ? Image.memory(book.selectedImage!)
+                  ? GestureDetector(onTap: ()async{
+                     book.pickImage();
+                  },child: Image.memory(book.selectedImage!, ))
                   : IconButton(
                       onPressed: () async {
                         book.pickImage();
                       },
-                      icon: Icon(Icons.browse_gallery)));
+                      icon: Icon(Icons.add_photo_alternate_rounded)));
         }),
         InputCaption(
             caption: "Rich Text",
@@ -79,6 +81,7 @@ class InputBab extends StatelessWidget {
               prov.inputJudulBab = _judulBabConttoler.text;
               prov.inputBab = _babConttoler.text;
               prov.inputTujuan = _tujuuanConttoler.text;
+              
             }),
       ]),
     );
