@@ -1,29 +1,38 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:gmu/home.dart';
-import 'package:gmu/state_management.dart';
+import 'package:gmu/input_provider.dart';
 
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gmu/pdf_provider.dart';
 import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //PodVideoPlayer.enableLogs = true;
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  FlutterQuillExtensions.useSuperClipboardPlugin();
+  // SystemChrome.setSystemUIOverlayStyle(
+  //     const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  // FlutterQuillExtensions.useSuperClipboardPlugin();
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
 
-  return runApp( ChangeNotifierProvider(
-      create: (context) => BooksProvider(),
-      child: const MyApp(),
-    ),);
+  return runApp( MultiProvider( child: const MyApp(),
+    providers: [
+      ChangeNotifierProvider(
+          create: (context) => BooksProvider(),
+         
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PdfProvider(null),
+         
+        ),
+    ],
+  ),);
 }
 
 class MyApp extends StatefulWidget {

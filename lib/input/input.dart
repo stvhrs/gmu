@@ -2,21 +2,42 @@ import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_to_pdf/converter/configurator/converter_option/pdf_page_format.dart';
 import 'package:flutter_quill_to_pdf/converter/pdf_converter.dart';
+import 'package:gmu/helper/help.dart';
+import 'package:gmu/input/component/input_materi.dart';
 import 'package:gmu/input/component/rich_text_field.dart';
-import 'package:gmu/state_management.dart';
+import 'package:gmu/input_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:gmu/pdf_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'component/textfield_caption.dart';
 
-class InputBab extends StatelessWidget {
-  final TextEditingController _footerConttoler = TextEditingController();
-  final TextEditingController _babConttoler = TextEditingController();
-  final TextEditingController _judulBabConttoler = TextEditingController();
-  final TextEditingController _tujuuanConttoler = TextEditingController();
-  final QuillController _quillController = QuillController.basic();
-
+class InputBab extends StatefulWidget {
   InputBab({super.key});
+
+  @override
+  State<InputBab> createState() => _InputBabState();
+}
+
+class _InputBabState extends State<InputBab> {
+  final TextEditingController _footerConttoler = TextEditingController();
+
+  final TextEditingController _babConttoler = TextEditingController();
+
+  final TextEditingController _judulBabConttoler = TextEditingController();
+
+  final TextEditingController _tujuuanConttoler = TextEditingController();
+
+  @override
+  initState() {
+    var prov = Provider.of<BooksProvider>(context, listen: false);
+    _footerConttoler.text = prov.footer.judulFooter;
+    _babConttoler.text = prov.bab.bab.toString();
+    _judulBabConttoler.text = prov.bab.judulBab;
+    _tujuuanConttoler.text = prov.tujuan.tujuan;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -52,15 +73,21 @@ class InputBab extends StatelessWidget {
             caption: "Tujuan",
             child: TextFormField(
               controller: _tujuuanConttoler,
-              maxLines: 10,
+              textInputAction: TextInputAction.newline,
+              onChanged: (value) {},
+              maxLines: 100,minLines: 1,
             )),
         Consumer<BooksProvider>(builder: (context, book, c) {
           return InputCaption(
               caption: "PetaKonsep",
               child: book.selectedImage != null
-                  ? GestureDetector(onTap: ()async{
-                     book.pickImage();
-                  },child: Image.memory(book.selectedImage!, ))
+                  ? GestureDetector(
+                      onTap: () async {
+                        book.pickImage();
+                      },
+                      child: Image.memory(
+                        book.selectedImage!,
+                      ))
                   : IconButton(
                       onPressed: () async {
                         book.pickImage();
@@ -68,20 +95,24 @@ class InputBab extends StatelessWidget {
                       icon: Icon(Icons.add_photo_alternate_rounded)));
         }),
         InputCaption(
-            caption: "Rich Text",
-            child: SizedBox(
-                height: 500,
-                child: RichTextField(controller: _quillController))),
+            caption: "Materi",
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(8)),
+                child: InputMateri())),
+
+    
         FloatingActionButton(
             backgroundColor: Colors.green,
             child: const Icon(Icons.refresh),
-            onPressed: () {
+            onPressed: () async{
               var prov = Provider.of<BooksProvider>(context, listen: false);
               prov.inputJudulFooter = _footerConttoler.text;
               prov.inputJudulBab = _judulBabConttoler.text;
               prov.inputBab = _babConttoler.text;
               prov.inputTujuan = _tujuuanConttoler.text;
-              
+              Provider.of<PdfProvider>(context,listen: false).setPdf=await prov.generatePDF();
             }),
       ]),
     );

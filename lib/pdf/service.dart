@@ -19,7 +19,7 @@ import 'dart:async';
 import 'package:gmu/models/models.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math; // import this
-
+import 'dart:developer' as dev;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
@@ -31,23 +31,25 @@ class User {
   const User({required this.name, required this.age});
 }
 
-Future<Uint8List> printAll(
-  PageFooter footer,
-  Bab bab,
-  Tujuan tujuan,
-  PetaKonsep petaKonsep,
-) async {
+const listAlphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+const listAlphabetH2 = ["a", "b", "c", "d", "e", "f", "g"];
+
+Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
+    PetaKonsep petaKonsep, Materi materi) async {
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
-  final image2 = await imageFromAssetBundle('asset/Judul Bab.png');
-  final image3 = await imageFromAssetBundle('asset/Tujuan.png');
-  final image4 = await imageFromAssetBundle('asset/Peta Konsep.png');
+  final imageJudulBab = await imageFromAssetBundle('asset/Judul Bab.png');
+  final imageTujuan = await imageFromAssetBundle('asset/Tujuan.png');
+  final imagePetaKonsep = await imageFromAssetBundle('asset/Peta Konsep.png');
+  final iamgeMateri = await imageFromAssetBundle('asset/Materi.png');
+  final imagePointer = await imageFromAssetBundle('asset/Pointer.png');
 
+  List<IsiMateri> listH1 = [];
   //Profile image
   buildFooter(int index) => Container(
         margin: const EdgeInsets.only(
-          top: 10,
-        ),
+            // top: 10,
+            ),
         child: Stack(alignment: Alignment.center, children: [
           Transform(
               alignment: Alignment.center,
@@ -86,7 +88,7 @@ Future<Uint8List> printAll(
 
   widgets.add(
     Stack(alignment: Alignment.center, children: [
-      Image(image2,
+      Image(imageJudulBab,
           fit: BoxFit.fitWidth, alignment: Alignment.topCenter, height: 130),
       Positioned(
           top: 36,
@@ -134,25 +136,55 @@ Future<Uint8List> printAll(
     cellAlignment: Alignment.center,
     tableWidth: TableWidth.min,
   );
-  widgets.add(Container(
-      margin: EdgeInsets.only(bottom: 40),
-      child: Stack(
-          overflow: Overflow.visible,
-          alignment: Alignment.topLeft,
-          children: [
-            DottedBorder(
-                child: Container(
-              decoration: BoxDecoration(
-                color: PdfColor.fromHex("#DFE3D4"),
-              ),
-              width: double.infinity,
-              child: Padding(
-                  padding:
-                      EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
-                  child: Text(tujuan.tujuan,style: TextStyle(fontSize: 11 ))),
-            )),
-            Positioned(top: -20, left: 0, child: Image(image3, width: 225))
-          ])));
+  Widget buildH1(IsiMateri isi) {
+    dev.log("h1");
+    //  Stack( overflow: Overflow.visible,
+    //   children: [
+    //   Container(
+    //       decoration: BoxDecoration(
+    //           border: Border.all(width: 2),
+    //           borderRadius: BorderRadius.circular(100))),
+    //   Positioned(
+    //       left: -10,
+    //       child: Stack(children: [
+    return Image(imagePointer, width: 100);
+  }
+
+  Widget buildH2(IsiMateri isi) {
+    return Padding(
+        padding: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Text(isi.text,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: PdfColor.fromHex("#DFE3D4"))));
+  }
+
+  Widget buildH3(IsiMateri isi) {
+    return Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+        ),
+        child: Text(isi.text,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            )));
+  }
+
+  Widget buildH4(IsiMateri isi) {
+    return Padding(
+        padding: EdgeInsets.only(left: 20),
+        child: Text(
+          isi.text,
+        ));
+  }
+
+  Widget buildfree(IsiMateri isi) {
+    return Text(
+      isi.text,
+    );
+  }
 
   widgets.add(Container(
       margin: EdgeInsets.only(bottom: 40),
@@ -169,50 +201,74 @@ Future<Uint8List> printAll(
               child: Padding(
                   padding:
                       EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
-                  child: petaKonsep.imagePath != null
-                      ? Image(MemoryImage(petaKonsep.imagePath!,),height: 120)
-                      : SizedBox()),
+                  child: Text(tujuan.tujuan, style: TextStyle(fontSize: 13))),
             )),
-            Positioned(top: -30, left: 0, child: Image(image4, width: 225,alignment: Alignment.center))
+            Positioned(top: -20, left: 0, child: Image(imageTujuan, width: 200))
           ])));
-  widgets.add(coba);
-  widgets.add(Table(border: TableBorder.all(), children: [
-    TableRow(children: [
-      Text('Column 1'),
-      Text('Column 2'),
-    ]),
-    TableRow(children: [
-      Text('Entry 1'),
-      Table(border: TableBorder.all(), children: [
-        TableRow(children: [
-          Text('Nested Entry 1'),
-          Text('Nested Entry 2'),
-        ]),
-        TableRow(children: [
-          Text('Nested Entry 3'),
-          Text('Nested Entry 4'),
-        ]),
-      ]),
-    ]),
-  ]));
-  for (int i = 0; i < 6; i++) {
-    widgets.add(
-      Text(
-        'Heading',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-    widgets.add(SizedBox(height: 5));
-    widgets.add(
-      Text(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed accumsan augue, ut tincidunt lectus. Vestibulum venenatis euismod eros suscipit rhoncus. Sed vulputate congue turpis ut cursus. Proin sollicitudin nulla vel nisi vulputate sagittis. Morbi neque mauris, auctor id posuere eu, egestas porttitor justo. Donec tempus egestas lorem in convallis. Quisque fermentum, augue ut facilisis pretium, risus dolor viverra est, ac consequat tellus risus vitae sapien. ',
-        style: const TextStyle(color: PdfColors.grey),
-      ),
-    );
+
+  widgets.add(Container(
+      child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topLeft,
+          children: [
+        DottedBorder(
+            child: Container(
+          decoration: BoxDecoration(
+            color: PdfColor.fromHex("#DFE3D4"),
+          ),
+          width: double.infinity,
+          child: Padding(
+              padding:
+                  EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
+              child: petaKonsep.imagePath != null
+                  ? Image(
+                      MemoryImage(
+                        petaKonsep.imagePath!,
+                      ),
+                      height: 150)
+                  : SizedBox()),
+        )),
+        Positioned(
+            top: -30,
+            left: 0,
+            child:
+                Image(imagePetaKonsep, width: 200, alignment: Alignment.center))
+      ])));
+  widgets.add(Container(
+      margin: EdgeInsets.only(bottom: 40),
+      child: Image(iamgeMateri, width: 200)));
+
+  for (var i = 0; i < materi.listText.length; i++) {
+    dev.log("message");
+    TextType textType = materi.listText[i].textType;
+    switch (textType) {
+      case TextType.h1:
+        // listH1.add(materi.listText[i]);
+        widgets.add(buildH1(materi.listText[i]));
+        break;
+      case TextType.h2:
+        widgets.add(buildH2(materi.listText[i]));
+        break;
+      case TextType.h3:
+        widgets.add(buildH3(materi.listText[i]));
+        break;
+      case TextType.h4:
+        widgets.add(buildH4(materi.listText[i]));
+        break;
+      case TextType.freeText:
+        widgets.add(buildfree(materi.listText[i]));
+        break;
+      case TextType.imageSmall:
+      // TODO: Handle this case.
+      case TextType.imageBig:
+      // TODO: Handle this case.
+      case TextType.dropCap:
+      // TODO: Handle this case.
+      case TextType.tabel:
+      // TODO: Handle this case.
+    }
   }
+  widgets.add(coba);
 
   final pdf = Document();
 
@@ -220,7 +276,7 @@ Future<Uint8List> printAll(
     MultiPage(
       pageTheme: const PageTheme(
         margin: EdgeInsets.only(bottom: 0, top: 40, left: 40, right: 40),
-        pageFormat: PdfPageFormat(190 * 3, 270 * 3),
+        pageFormat: PdfPageFormat.a4,
       ),
       footer: (context) {
         return buildFooter(context.pageNumber);

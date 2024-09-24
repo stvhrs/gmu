@@ -22,7 +22,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
         body: Row(
       children: [
-        Expanded(
+        Expanded(flex: 4,
           child: Padding(
             padding: const EdgeInsets.only(top: 40,left: 40,right: 40),
             child: 
@@ -46,7 +46,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             
           ),
         ),
-        const Expanded(child: HalamanPDFSoalState()),
+        const Expanded(flex: 3,child: HalamanPDFSoalState()),
       ],
     ));
   }
