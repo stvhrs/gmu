@@ -29,12 +29,10 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
     loading = true;
     asu =
         await Provider.of<BooksProvider>(context, listen: false).generatePDF();
-              Provider.of<PdfProvider>(context,listen: false).setPdf=asu!;
-        
-    loading = false;
-    setState(() {
+    Provider.of<PdfProvider>(context, listen: false).setPdf = asu!;
 
-    });
+    loading = false;
+    setState(() {});
   }
 
   initState() {
@@ -45,37 +43,39 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
   Uint8List? asu;
   @override
   Widget build(BuildContext context) {
-    return loading?const Center(child: CircularProgressIndicator()): Consumer<PdfProvider>(builder: (context, book, child) {
-      asu=book.pdf;
-      return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.green,
-            onPressed: () async {
-              await Printing.sharePdf(bytes: asu!, filename: "");
-            },
-            child: IconButton(
-                onPressed: () async {},
-                icon: const Icon(
-                  Icons.download,
-                  color: Colors.white,
-                )),
-          ),
-          backgroundColor: Colors.white,
-          body: PdfPreview(
-            loadingWidget: const Text('Loading...'),
-            onError: (context, error) => const Text('Error...'),
-            pdfFileName: 'Buku.pdf',
-            canDebug: false,
-            allowPrinting: false,
-            actions: const [],
-            allowSharing: false,
-            build: (format) async {
-              return asu!;
-            },
-            canChangeOrientation: false,
-            canChangePageFormat: false,
-            onShared: _showSharedToast,
-          ));
-    });
+    return loading
+        ? const Center(child: CircularProgressIndicator())
+        : Consumer<PdfProvider>(builder: (context, book, child) {
+            asu = book.pdf;
+            return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: Colors.green,
+                  onPressed: () async {
+                    await Printing.sharePdf(bytes: asu!, filename: "");
+                  },
+                  child: IconButton(
+                      onPressed: () async {},
+                      icon: const Icon(
+                        Icons.download,
+                        color: Colors.white,
+                      )),
+                ),
+                backgroundColor: Colors.white,
+                body: PdfPreview(
+                  loadingWidget: const Text('Loading...'),
+                  onError: (context, error) => const Text('Error...'),
+                  pdfFileName: 'Buku.pdf',
+                  canDebug: false,
+                  allowPrinting: false,
+                  actions: const [],
+                  allowSharing: false,
+                  build: (format) async {
+                    return asu!;
+                  },
+                  canChangeOrientation: false,
+                  canChangePageFormat: false,
+                  onShared: _showSharedToast,
+                ));
+          });
   }
 }

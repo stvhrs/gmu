@@ -38,6 +38,7 @@ class _InputMateriState extends State<InputMateri> {
         ...book.materi.listText
             .mapIndexed(
               (index, text) => TextFormField(
+                onChanged: (value) {},
                 textAlign: TextAlign.justify,
                 decoration: InputDecoration(
                     fillColor: Colors.transparent,
@@ -122,12 +123,9 @@ class _InputMateriState extends State<InputMateri> {
             ElevatedButton(
               onPressed: () {
                 subMateriCon.add(TextEditingController()
-                  ..text =
-                      ".      Banyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berba");
+                  ..text = "1)  Lenovo\n    Bismillah");
                 book.addSubMateri(IsiMateri(
-                    textType: TextType.h4,
-                    text:
-                        ".      Banyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berba"));
+                    textType: TextType.h4, text: "1)  Lenovo\n    Bismillah"));
               },
               child: Text("h4"),
             ),

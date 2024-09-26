@@ -18,7 +18,8 @@ class PageFooter {
   String judulFooter;
 
   PageFooter({
-    this.judulFooter = "Fisika SMA X SMA/SMK Semester Genap (Kurikulum Merdeka)",
+    this.judulFooter =
+        "Fisika SMA X SMA/SMK Semester Genap (Kurikulum Merdeka)",
   });
 }
 
@@ -27,7 +28,7 @@ class Tujuan {
 
   Tujuan({
     this.tujuan =
-        "1. ...............\n3. ...............\n4. ...............\n5. ...............\n6. ...............\n7. ...............\n8. ...............\n9. ...............",
+        "1. ...............\n3. ...............\n4. ...............\n5. ...............\n6. ...............\n7. ...............\n8. ...............\n9................\n3. ...............\n4. ...............\n5. ...............\n6. ...............\n7. ...............\n8. ...............\n9. ...............",
   });
 }
 
@@ -40,7 +41,6 @@ class PetaKonsep {
 }
 
 class Materi {
-
   List<IsiMateri> listText;
   Materi({
     this.listText = const [],
@@ -58,7 +58,7 @@ class IsiMateri {
   String? tabelCaption;
   IsiMateri(
       {this.text = "Text Materi",
-     required this.textType,
+      required this.textType,
       this.imageCaption,
       this.alignment,
       this.image,
@@ -67,7 +67,7 @@ class IsiMateri {
       this.tabelCaption});
 }
 
-enum TextType { h1, h2, h3, h4,freeText, imageSmall, imageBig, dropCap, tabel }
+enum TextType { h1, h2, h3, h4, freeText, imageSmall, imageBig, dropCap, tabel }
 
 enum DataType {
   teks,

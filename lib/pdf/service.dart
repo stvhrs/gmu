@@ -16,6 +16,7 @@
 
 import 'dart:async';
 
+import 'package:flutter_to_pdf/flutter_to_pdf.dart';
 import 'package:gmu/models/models.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math; // import this
@@ -36,6 +37,8 @@ const listAlphabetH2 = ["a", "b", "c", "d", "e", "f", "g"];
 
 Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
     PetaKonsep petaKonsep, Materi materi) async {
+  PdfColor green = PdfColor.fromHex("#22B573");
+  PdfColor white = PdfColor.fromHex("#ffffff");
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
   final imageJudulBab = await imageFromAssetBundle('asset/Judul Bab.png');
@@ -47,6 +50,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
   List<IsiMateri> listH1 = [];
   //Profile image
   buildFooter(int index) => Container(
+        height: 70,
         margin: const EdgeInsets.only(
             // top: 10,
             ),
@@ -58,14 +62,11 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
                 image,
                 fit: BoxFit.fitWidth,
               )),
+          Text(
+              textAlign: TextAlign.center,
+              footer.judulFooter,
+              style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold)),
           Positioned(
-              bottom: 70,
-              child: Text(
-                  textAlign: TextAlign.center,
-                  footer.judulFooter,
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold))),
-          Positioned(
-              bottom: 70,
               left: index.isEven
                   ? index.toDouble() > 9
                       ? 14
@@ -80,9 +81,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
                   textAlign: TextAlign.center,
                   index.toString(),
                   style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: PdfColor.fromHex("#ffffff"))))
+                      fontSize: 12, fontWeight: FontWeight.bold, color: white)))
         ]),
       );
 
@@ -104,16 +103,12 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
                 textAlign: TextAlign.center,
                 "Subbab",
                 style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: PdfColor.fromHex("#ffffff"))),
+                    fontSize: 16, fontWeight: FontWeight.bold, color: white)),
             Text(
                 textAlign: TextAlign.center,
                 bab.bab.toString(),
                 style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: PdfColor.fromHex("#ffffff")))
+                    fontSize: 30, fontWeight: FontWeight.bold, color: white))
           ]))
     ]),
   );
@@ -137,53 +132,73 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
     tableWidth: TableWidth.min,
   );
   Widget buildH1(IsiMateri isi) {
-    dev.log("h1");
+    dev.log(isi.text);
     //  Stack( overflow: Overflow.visible,
     //   children: [
-    //   Container(
-    //       decoration: BoxDecoration(
-    //           border: Border.all(width: 2),
-    //           borderRadius: BorderRadius.circular(100))),
+
     //   Positioned(
     //       left: -10,
     //       child: Stack(children: [
-    return Image(imagePointer, width: 100);
+    return Container(
+        margin: EdgeInsets.only(left: 18, bottom: 10),
+        child: Stack(
+            overflow: Overflow.visible,
+            alignment: Alignment.center,
+            children: [
+              Container(
+                  height: 25,
+                  padding: EdgeInsets.only(left: 25),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      "Identifikasi Unsur C dan H dalam Senyawa Hidrokarbon",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: green,
+                          fontWeight: FontWeight.bold)),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      color: white,
+                      borderRadius: BorderRadius.circular(12))),
+              Positioned(
+                  left: -21,
+                  child: Stack(alignment: Alignment.center, children: [
+                    Image(imagePointer, width: 40),
+                    Text("A",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: white))
+                  ])),
+            ]));
   }
 
   Widget buildH2(IsiMateri isi) {
-    return Padding(
-        padding: EdgeInsets.only(
-          top: 10,
-        ),
-        child: Text(isi.text,
+    return Text(isi.text,
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: PdfColor.fromHex("#DFE3D4"))));
+                fontWeight: FontWeight.bold, color: green, fontSize: 11));
   }
 
   Widget buildH3(IsiMateri isi) {
     return Padding(
         padding: EdgeInsets.only(
-          left: 20,
+          left: 17,
         ),
         child: Text(isi.text,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )));
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)));
   }
 
   Widget buildH4(IsiMateri isi) {
     return Padding(
-        padding: EdgeInsets.only(left: 20),
-        child: Text(
-          isi.text,
-        ));
+        padding: EdgeInsets.only(left: 17 ),
+        child: Text(textAlign: TextAlign.justify,"      " +isi.text, style: TextStyle(fontSize: 11)));
   }
 
   Widget buildfree(IsiMateri isi) {
-    return Text(
-      isi.text,
-    );
+    return SizedBox(
+        child: Text("      " + isi.text,
+            textAlign: TextAlign.justify,
+            overflow: TextOverflow.span,
+            style: TextStyle(fontSize: 11)));
   }
 
   widgets.add(Container(
@@ -209,10 +224,12 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
   widgets.add(Container(
       child: Stack(
           overflow: Overflow.visible,
-          alignment: Alignment.topLeft,
+          alignment: Alignment.center,
           children: [
         DottedBorder(
             child: Container(
+          height: 200,
+          alignment: Alignment.center,
           decoration: BoxDecoration(
             color: PdfColor.fromHex("#DFE3D4"),
           ),
@@ -222,10 +239,11 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
                   EdgeInsets.only(top: 18, left: 15, right: 15, bottom: 15),
               child: petaKonsep.imagePath != null
                   ? Image(
+                      alignment: Alignment.center,
                       MemoryImage(
                         petaKonsep.imagePath!,
                       ),
-                      height: 150)
+                    )
                   : SizedBox()),
         )),
         Positioned(
@@ -235,7 +253,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
                 Image(imagePetaKonsep, width: 200, alignment: Alignment.center))
       ])));
   widgets.add(Container(
-      margin: EdgeInsets.only(bottom: 40),
+      margin: EdgeInsets.only(bottom: 20),
       child: Image(iamgeMateri, width: 200)));
 
   for (var i = 0; i < materi.listText.length; i++) {
@@ -246,6 +264,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
         // listH1.add(materi.listText[i]);
         widgets.add(buildH1(materi.listText[i]));
         break;
+
       case TextType.h2:
         widgets.add(buildH2(materi.listText[i]));
         break;
@@ -275,7 +294,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
   pdf.addPage(
     MultiPage(
       pageTheme: const PageTheme(
-        margin: EdgeInsets.only(bottom: 0, top: 40, left: 40, right: 40),
+        margin: EdgeInsets.only(bottom: 40, top: 60, left: 60, right: 60),
         pageFormat: PdfPageFormat.a4,
       ),
       footer: (context) {
