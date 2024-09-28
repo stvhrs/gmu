@@ -35,59 +35,119 @@ class User {
 const listAlphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
 const listAlphabetH2 = ["a", "b", "c", "d", "e", "f", "g"];
 
+class Heading1 extends StatelessWidget {
+  final IsiMateri isi;
+  final ImageProvider imagePointer;
+  PdfColor green = PdfColor.fromHex("#22B573");
+
+  PdfColor white = PdfColor.fromHex("#ffffff");
+
+  Heading1({required this.isi, required this.imagePointer});
+
+  Widget build(context) {
+    return Container(
+        margin: EdgeInsets.only(left: 18, bottom: 20, top: 20),
+        child: Stack(
+            overflow: Overflow.visible,
+            alignment: Alignment.center,
+            children: [
+              Container(
+                  height: 25,
+                  padding: EdgeInsets.only(left: 25),
+                  alignment: Alignment.centerLeft,
+                  child: Text(isi.text,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: green,
+                          fontWeight: FontWeight.bold)),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      color: white,
+                      borderRadius: BorderRadius.circular(12))),
+              Positioned(
+                  left: -21,
+                  child: Stack(alignment: Alignment.center, children: [
+                    Image(imagePointer, width: 40),
+                    Positioned(
+                        left: 10.5,
+                        child: Text("A",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: white)))
+                  ])),
+            ]));
+  }
+}
+
+class Footer extends StatelessWidget {
+  final int index;
+  final PageFooter footer;
+  final ImageProvider image;
+  PdfColor white = PdfColor.fromHex("#ffffff");
+
+  Footer(this.index, this.footer, this.image);
+  @override
+  Widget build(context) {
+    return Container(
+      height: 70,
+      margin: const EdgeInsets.only(
+          // top: 10,
+          ),
+      child: Stack(alignment: Alignment.center, children: [
+        Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.rotationY(index.isOdd ? math.pi : 0),
+            child: Image(
+              image,
+              fit: BoxFit.fitWidth,
+            )),
+        Positioned(
+            bottom: 25,
+            child: Text(
+                textAlign: TextAlign.center,
+                footer.judulFooter,
+                style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold))),
+        Positioned(
+            bottom: 23,
+            left: index.isEven
+                ? index.toDouble() > 9
+                    ? 12.5
+                    : 16
+                : null,
+            right: index.isOdd
+                ? index.toDouble() > 9
+                    ? 12.5
+                    : 16
+                : null,
+            child: Text(
+                textAlign: TextAlign.center,
+                index.toString(),
+                style: TextStyle(
+                    fontSize: 12, fontWeight: FontWeight.bold, color: white)))
+      ]),
+    );
+  }
+}
+
 Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
     PetaKonsep petaKonsep, Materi materi) async {
   PdfColor green = PdfColor.fromHex("#22B573");
   PdfColor white = PdfColor.fromHex("#ffffff");
   List<Widget> widgets = [];
   final image = await imageFromAssetBundle('asset/Footer.png');
-  final imageJudulBab = await imageFromAssetBundle('asset/Judul Bab.png');
+  final imageHeading1 = await imageFromAssetBundle('asset/Judul Bab.png');
   final imageTujuan = await imageFromAssetBundle('asset/Tujuan.png');
   final imagePetaKonsep = await imageFromAssetBundle('asset/Peta Konsep.png');
   final iamgeMateri = await imageFromAssetBundle('asset/Materi.png');
   final imagePointer = await imageFromAssetBundle('asset/Pointer.png');
 
-  List<IsiMateri> listH1 = [];
   //Profile image
-  buildFooter(int index) => Container(
-        height: 70,
-        margin: const EdgeInsets.only(
-            // top: 10,
-            ),
-        child: Stack(alignment: Alignment.center, children: [
-          Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.rotationY(index.isOdd ? math.pi : 0),
-              child: Image(
-                image,
-                fit: BoxFit.fitWidth,
-              )),
-          Text(
-              textAlign: TextAlign.center,
-              footer.judulFooter,
-              style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold)),
-          Positioned(
-              left: index.isEven
-                  ? index.toDouble() > 9
-                      ? 14
-                      : 17
-                  : null,
-              right: index.isOdd
-                  ? index.toDouble() > 9
-                      ? 14
-                      : 17
-                  : null,
-              child: Text(
-                  textAlign: TextAlign.center,
-                  index.toString(),
-                  style: TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.bold, color: white)))
-        ]),
-      );
+  // buildFooter(int index) =>
 
   widgets.add(
     Stack(alignment: Alignment.center, children: [
-      Image(imageJudulBab,
+      Image(imageHeading1,
           fit: BoxFit.fitWidth, alignment: Alignment.topCenter, height: 130),
       Positioned(
           top: 36,
@@ -97,7 +157,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
       Positioned(
           top: 28,
-          left: 32,
+          left: 30,
           child: Column(children: [
             Text(
                 textAlign: TextAlign.center,
@@ -131,66 +191,31 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
     cellAlignment: Alignment.center,
     tableWidth: TableWidth.min,
   );
-  Widget buildH1(IsiMateri isi) {
-    dev.log(isi.text);
-    //  Stack( overflow: Overflow.visible,
-    //   children: [
-
-    //   Positioned(
-    //       left: -10,
-    //       child: Stack(children: [
-    return Container(
-        margin: EdgeInsets.only(left: 18, bottom: 10),
-        child: Stack(
-            overflow: Overflow.visible,
-            alignment: Alignment.center,
-            children: [
-              Container(
-                  height: 25,
-                  padding: EdgeInsets.only(left: 25),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                      "Identifikasi Unsur C dan H dalam Senyawa Hidrokarbon",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: green,
-                          fontWeight: FontWeight.bold)),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      color: white,
-                      borderRadius: BorderRadius.circular(12))),
-              Positioned(
-                  left: -21,
-                  child: Stack(alignment: Alignment.center, children: [
-                    Image(imagePointer, width: 40),
-                    Text("A",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: white))
-                  ])),
-            ]));
-  }
 
   Widget buildH2(IsiMateri isi) {
-    return Text(isi.text,
+    return Padding(
+        padding: EdgeInsets.only(
+          top: 5,
+        ),
+        child: Text(isi.text,
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: green, fontSize: 11));
+                fontWeight: FontWeight.bold, color: green, fontSize: 11)));
   }
 
   Widget buildH3(IsiMateri isi) {
     return Padding(
-        padding: EdgeInsets.only(
-          left: 17,
-        ),
+        padding: EdgeInsets.only(left: 17, top: 5),
         child: Text(isi.text,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)));
   }
 
   Widget buildH4(IsiMateri isi) {
     return Padding(
-        padding: EdgeInsets.only(left: 17 ),
-        child: Text(textAlign: TextAlign.justify,"      " +isi.text, style: TextStyle(fontSize: 11)));
+        padding: EdgeInsets.only(left: 17),
+        child: Text(
+            textAlign: TextAlign.justify,
+            "      " + isi.text,
+            style: TextStyle(fontSize: 11)));
   }
 
   Widget buildfree(IsiMateri isi) {
@@ -247,7 +272,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
                   : SizedBox()),
         )),
         Positioned(
-            top: -30,
+            top: -25,
             left: 0,
             child:
                 Image(imagePetaKonsep, width: 200, alignment: Alignment.center))
@@ -262,7 +287,8 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
     switch (textType) {
       case TextType.h1:
         // listH1.add(materi.listText[i]);
-        widgets.add(buildH1(materi.listText[i]));
+        widgets
+            .add(Heading1(isi: materi.listText[i], imagePointer: imagePointer));
         break;
 
       case TextType.h2:
@@ -290,7 +316,6 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
   widgets.add(coba);
 
   final pdf = Document();
-
   pdf.addPage(
     MultiPage(
       pageTheme: const PageTheme(
@@ -298,7 +323,7 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
         pageFormat: PdfPageFormat.a4,
       ),
       footer: (context) {
-        return buildFooter(context.pageNumber);
+        return Footer(context.pageNumber, footer, image);
       },
 
       build: (context) => widgets, //here goes the widgets list

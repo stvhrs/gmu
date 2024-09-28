@@ -43,6 +43,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
   Uint8List? asu;
   @override
   Widget build(BuildContext context) {
+    log("pdf");
     return loading
         ? const Center(child: CircularProgressIndicator())
         : Consumer<PdfProvider>(builder: (context, book, child) {
@@ -53,12 +54,10 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
                   onPressed: () async {
                     await Printing.sharePdf(bytes: asu!, filename: "");
                   },
-                  child: IconButton(
-                      onPressed: () async {},
-                      icon: const Icon(
+                  child: Icon(
                         Icons.download,
                         color: Colors.white,
-                      )),
+                      ),
                 ),
                 backgroundColor: Colors.white,
                 body: PdfPreview(

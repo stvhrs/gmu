@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,123 +33,128 @@ class _InputMateriState extends State<InputMateri> {
     super.initState();
   }
 
+  ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    log("input");
     return Consumer<BooksProvider>(builder: (context, book, c) {
-      return Column(children: [
-        ...book.materi.listText
-            .mapIndexed(
-              (index, text) => TextFormField(
-                onChanged: (value) {},
-                textAlign: TextAlign.justify,
-                decoration: InputDecoration(
-                    fillColor: Colors.transparent,
-                    contentPadding: text.textType == TextType.h4 ||
-                            text.textType == TextType.h3
-                        ? EdgeInsets.only(
-                            left: text.textType == TextType.h4 ? 60 : 30)
-                        : EdgeInsets.all(10),
-                    suffixIcon: InkWell(
-                        onTap: () {
-                          subMateriCon.removeAt(index);
-                          book.removeMateri(text);
+      return Container(
+        constraints: BoxConstraints(maxHeight: 1000, minHeight: 200),
+        child: Scrollbar(
+          controller: _scrollController,
+          scrollbarOrientation: ScrollbarOrientation.left,
+          thumbVisibility: true,
+          child: ListView(
+              controller: _scrollController,
+              addAutomaticKeepAlives: false,
+              children: [
+                ...book.materi.listText
+                    .mapIndexed(
+                      (index, text) => TextFormField(
+                        onChanged: (value) {
+                          book.materi.listText[index].text = value;
                         },
-                        child: Icon(Icons.delete)),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          BorderSide(color: Colors.transparent, width: 0),
+                        textAlign: TextAlign.justify,
+                        decoration: InputDecoration(
+                            fillColor: Colors.transparent,
+                            contentPadding: EdgeInsets.all(10),
+                            suffixIcon: InkWell(
+                                onTap: () {
+                                  subMateriCon.removeAt(index);
+                                  book.removeMateri(text);
+                                },
+                                child: Icon(Icons.delete)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                  style: BorderStyle.solid),
+                            )),
+                        maxLines: 100,
+                        minLines: 1,
+                        style: TextStyle(
+                            color: text.textType == TextType.h2
+                                ? Colors.green
+                                : Colors.black,
+                            fontWeight: (text.textType != TextType.h4 &&
+                                    text.textType != TextType.freeText)
+                                ? FontWeight.bold
+                                : FontWeight.normal),
+                        controller: subMateriCon[index],
+                      ),
+                    )
+                    .toList(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        subMateriCon.add(TextEditingController()
+                          ..text = "Senyawa Hidrokarbon");
+                        book.addSubMateri(IsiMateri(
+                            textType: TextType.h1,
+                            text: "Senyawa Hidrokarbon"));
+                      },
+                      child: Text("h1"),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                          style: BorderStyle.solid),
-                    )),
-                maxLines: 100,
-                minLines: 1,
-                style: TextStyle(
-                    color: text.textType == TextType.h2
-                        ? Colors.green
-                        : Colors.black,
-                    fontWeight: (text.textType != TextType.h4)
-                        ? FontWeight.bold
-                        : FontWeight.normal),
-                controller: subMateriCon[index],
-              ),
-            )
-            .toList(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                subMateriCon
-                    .add(TextEditingController()..text = "Senyawa Hidrokarbon");
-                book.addSubMateri(IsiMateri(
-                    textType: TextType.h1, text: "Senyawa Hidrokarbon"));
-              },
-              child: Text("h1"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                subMateriCon.add(TextEditingController()..text = "1.  Alkana");
-                book.addSubMateri(
-                    IsiMateri(textType: TextType.h2, text: "1.  Alkana"));
-              },
-              child: Text("h2"),
-            ),
-            ElevatedButton(
-              child: Text("h3"),
-              onPressed: () {
-                subMateriCon.add(TextEditingController()
-                  ..text = "a.  Tata nama Alkohol (Alkanol)");
-                book.addSubMateri(IsiMateri(
-                    textType: TextType.h3,
-                    text: "a.  Tata nama Alkohol (Alkanol)"));
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                subMateriCon.add(TextEditingController()
-                  ..text =
-                      ".      Banyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berba");
-                book.addSubMateri(IsiMateri(
-                    textType: TextType.freeText,
-                    text:
-                        ".      Banyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berba"));
-              },
-              child: Text("h4"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                subMateriCon.add(TextEditingController()
-                  ..text = "1)  Lenovo\n    Bismillah");
-                book.addSubMateri(IsiMateri(
-                    textType: TextType.h4, text: "1)  Lenovo\n    Bismillah"));
-              },
-              child: Text("h4"),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Tabel"),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Drop Cap"),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Image Small"),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Image Big"),
-            )
-          ],
+                    ElevatedButton(
+                      onPressed: () {
+                        subMateriCon
+                            .add(TextEditingController()..text = "1.  Alkana");
+                        book.addSubMateri(IsiMateri(
+                            textType: TextType.h2, text: "1.  Alkana"));
+                      },
+                      child: Text("h2"),
+                    ),
+                    ElevatedButton(
+                      child: Text("h3"),
+                      onPressed: () {
+                        subMateriCon.add(TextEditingController()
+                          ..text = "a.  Tata nama Alkohol (Alkanol)");
+                        book.addSubMateri(IsiMateri(
+                            textType: TextType.h3,
+                            text: "a.  Tata nama Alkohol (Alkanol)"));
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        subMateriCon.add(TextEditingController()
+                          ..text =
+                              "Banyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berba");
+                        book.addSubMateri(IsiMateri(
+                            textType: TextType.freeText,
+                            text:
+                                "Banyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berbaBanyaknya jenis dan jumlah senyawa karbon tidak terlepas dari sifat khas atom karbonyang dapat membentuk senyawa dengan berba"));
+                      },
+                      child: Text("h4"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Tabel"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Drop Cap"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Image Small"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Image Big"),
+                    )
+                  ],
+                ),
+              ]),
         ),
-      ]);
+      );
     });
   }
 }

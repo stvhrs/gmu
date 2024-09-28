@@ -40,8 +40,7 @@ class _InputBabState extends State<InputBab> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return ListView(addAutomaticKeepAlives: false, children: [
         Row(
           children: [
             Flexible(
@@ -114,7 +113,7 @@ class _InputBabState extends State<InputBab> {
               prov.inputTujuan = _tujuuanConttoler.text;
               Provider.of<PdfProvider>(context,listen: false).setPdf=await prov.generatePDF();
             }),
-      ]),
-    );
+      ]);
+    
   }
 }
