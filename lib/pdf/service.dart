@@ -35,6 +35,72 @@ class User {
 const listAlphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
 const listAlphabetH2 = ["a", "b", "c", "d", "e", "f", "g"];
 
+            class FreeText extends StatelessWidget {
+  final IsiMateri isi;
+  PdfColor green = PdfColor.fromHex("#22B573");
+
+  PdfColor white = PdfColor.fromHex("#ffffff");
+
+  FreeText({required this.isi, });
+
+  Widget build(context) {
+    return SizedBox(
+        child: Text("      " + isi.text,
+            textAlign: TextAlign.justify,
+            overflow: TextOverflow.span,
+            style: TextStyle(
+              fontSize: 11,
+            )));
+}}
+class Heading4 extends StatelessWidget {
+  final IsiMateri isi;
+  PdfColor green = PdfColor.fromHex("#22B573");
+
+  PdfColor white = PdfColor.fromHex("#ffffff");
+
+  Heading4({required this.isi, });
+
+  Widget build(context) {
+    return Padding(
+        padding: EdgeInsets.only(left: 17),
+        child: Text(
+            textAlign: TextAlign.justify,
+            "      " + isi.text,
+            style: TextStyle(fontSize: 11)));
+}}
+class Heading3 extends StatelessWidget {
+  final IsiMateri isi;
+  PdfColor green = PdfColor.fromHex("#22B573");
+
+  PdfColor white = PdfColor.fromHex("#ffffff");
+
+  Heading3({required this.isi, });
+
+  Widget build(context) {
+    return Padding(
+        padding: EdgeInsets.only(left: 17, top: 5),
+        child: Text(isi.text,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)));
+  }
+}
+class Heading2 extends StatelessWidget {
+  final IsiMateri isi;
+  PdfColor green = PdfColor.fromHex("#22B573");
+
+  PdfColor white = PdfColor.fromHex("#ffffff");
+
+  Heading2({required this.isi, });
+
+  Widget build(context) {
+    return Padding(
+        padding: EdgeInsets.only(
+          top: 5,
+        ),
+        child: Text(isi.text,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: green, fontSize: 11)));
+  }
+}
 class Heading1 extends StatelessWidget {
   final IsiMateri isi;
   final ImageProvider imagePointer;
@@ -192,39 +258,11 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
     tableWidth: TableWidth.min,
   );
 
-  Widget buildH2(IsiMateri isi) {
-    return Padding(
-        padding: EdgeInsets.only(
-          top: 5,
-        ),
-        child: Text(isi.text,
-            style: TextStyle(
-                fontWeight: FontWeight.bold, color: green, fontSize: 11)));
-  }
+ 
 
-  Widget buildH3(IsiMateri isi) {
-    return Padding(
-        padding: EdgeInsets.only(left: 17, top: 5),
-        child: Text(isi.text,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)));
-  }
 
-  Widget buildH4(IsiMateri isi) {
-    return Padding(
-        padding: EdgeInsets.only(left: 17),
-        child: Text(
-            textAlign: TextAlign.justify,
-            "      " + isi.text,
-            style: TextStyle(fontSize: 11)));
-  }
 
-  Widget buildfree(IsiMateri isi) {
-    return SizedBox(
-        child: Text("      " + isi.text,
-            textAlign: TextAlign.justify,
-            overflow: TextOverflow.span,
-            style: TextStyle(fontSize: 11)));
-  }
+
 
   widgets.add(Container(
       margin: EdgeInsets.only(bottom: 40),
@@ -292,16 +330,15 @@ Future<Uint8List> printAll(PageFooter footer, Bab bab, Tujuan tujuan,
         break;
 
       case TextType.h2:
-        widgets.add(buildH2(materi.listText[i]));
+        widgets.add(Heading2(isi: materi.listText[i], ));
         break;
       case TextType.h3:
-        widgets.add(buildH3(materi.listText[i]));
+         widgets.add(Heading3(isi: materi.listText[i], ));
         break;
       case TextType.h4:
-        widgets.add(buildH4(materi.listText[i]));
-        break;
+       widgets.add(Heading4(isi: materi.listText[i], ));   break;
       case TextType.freeText:
-        widgets.add(buildfree(materi.listText[i]));
+         widgets.add(FreeText(isi: materi.listText[i], ));
         break;
       case TextType.imageSmall:
       // TODO: Handle this case.

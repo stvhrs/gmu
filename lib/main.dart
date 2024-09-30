@@ -1,38 +1,35 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:gmu/home.dart';
 import 'package:gmu/input_provider.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gmu/pdf_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:html/parser.dart';
+import 'package:html/dom.dart' as dom;
+
 void main() async {
+ 
+
   WidgetsFlutterBinding.ensureInitialized();
-//PodVideoPlayer.enableLogs = true;
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-  // SystemChrome.setSystemUIOverlayStyle(
-  //     const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  // FlutterQuillExtensions.useSuperClipboardPlugin();
-
-  // await SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  // ]);
-
-  return runApp( MultiProvider( child: const MyApp(),
-    providers: [
-      ChangeNotifierProvider(
+  return runApp(
+    MultiProvider(
+      child: const MyApp(),
+      providers: [
+        ChangeNotifierProvider(
           create: (context) => BooksProvider(),
-         
         ),
         ChangeNotifierProvider(
           create: (context) => PdfProvider(null),
-         
         ),
-    ],
-  ),);
+      ],
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -43,16 +40,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,scrollBehavior: ScrollConfiguration.of(context).copyWith(
-    dragDevices: {
-      PointerDeviceKind.touch,
-      PointerDeviceKind.mouse,
-    },
-  ),
+        debugShowCheckedModeBanner: false,
+        scrollBehavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+          },
+        ),
         themeMode: ThemeMode.dark,
         theme: ThemeData(
             pageTransitionsTheme: const PageTransitionsTheme(
@@ -65,8 +62,7 @@ class _MyAppState extends State<MyApp> {
               hintStyle: TextStyle(
                 color: Colors.green.withOpacity(0.7),
               ),
-              prefixIconColor:
-                  Colors.green.withOpacity(0.7),
+              prefixIconColor: Colors.green.withOpacity(0.7),
               prefixStyle: const TextStyle(fontSize: 10),
               // ignore: prefer_const_constructors
               labelStyle: const TextStyle(
@@ -74,8 +70,7 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.green,
                 letterSpacing: 0.7,
               ),
-              contentPadding:
-                   const EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(10),
               filled: true,
               fillColor: Colors.grey.shade100,
               focusedBorder: OutlineInputBorder(
@@ -93,14 +88,10 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.green,
                 actionsIconTheme: IconThemeData(color: Colors.white)),
-          
-          
-          
             colorScheme: ColorScheme.fromSwatch().copyWith(
               secondary: const Color.fromRGBO(236, 180, 84, 1),
               primary: Colors.green,
             )),
-        home:  const Home()
-               );
+        home: const Home());
   }
 }
