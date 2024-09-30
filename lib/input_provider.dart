@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:file_picker/file_picker.dart';
@@ -10,6 +11,7 @@ import 'package:gmu/pdf/service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as ImageProcess;
 
 class BooksProvider with ChangeNotifier {
   Bab bab = Bab();
@@ -38,6 +40,14 @@ class BooksProvider with ChangeNotifier {
     if (result != null) {
       selectedImage = result.files[0].bytes;
       petaKonsep.imagePath = selectedImage;
+      final _imageFile = ImageProcess.decodeImage(
+        selectedImage!,
+      );
+      String base64Image = base64Encode(ImageProcess.encodePng(_imageFile!));
+      log(base64Image);
+      final _byteImage = Base64Decoder().convert(base64Image);
+      Widget image = Image.memory(_byteImage);
+
       notifyListeners();
     }
   }
@@ -78,7 +88,6 @@ class BooksProvider with ChangeNotifier {
   }
 
   Future<Uint8List> generatePDF() async {
- 
     loading = true;
     log(loading.toString());
     pdf = await printAll(footer, bab, tujuan, petaKonsep, materi);
